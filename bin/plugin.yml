@@ -1,0 +1,8 @@
+name: InitialProtect
+version: 1.3 By notaro1997!
+main: notaro.InitialProtect.InitialProtect
+author: notaro1997
+commands:
+    safe:
+      description: Enable a new player to build.
+      -usage: /safe

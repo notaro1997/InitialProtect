@@ -1,0 +1,2 @@
+Thank you for downloading this plugin by notaro1997. If you would like to donate please do so at notaro1997.webs.com/ 
+Also, fyi the permission node to /safe is notaro.safe Thanks, and enjoy the plugin.
