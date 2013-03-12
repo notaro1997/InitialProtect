@@ -23,9 +23,9 @@ public class ProtectCommand implements CommandExecutor{
 			if(player.hasPermission("notaro.safe")){
 				if(args.length == 1){
 					Player target = Bukkit.getPlayer(args[0]);
-					ProtectFile ProtectFile = plugin.getPlayerInfo();
-					ProtectFile.getPlayers().set(target.getName() + ".Safe", true);
-					ProtectFile.savePlayers();
+					ProtectFile ProtectFile = plugin.SafePlayers;
+					ProtectFile.add(target.getName());
+					ProtectFile.saveData();
 					player.sendMessage(ChatColor.DARK_AQUA + target.getDisplayName() + ChatColor.DARK_AQUA + " is now verified to be safe, and can build.");
 					target.sendMessage(ChatColor.DARK_AQUA + "You are now verified safe, and can build.");
 				}else{

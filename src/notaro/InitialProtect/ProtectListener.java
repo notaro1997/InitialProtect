@@ -16,10 +16,10 @@ public class ProtectListener implements Listener{
 	}
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onBreakEvent(BlockBreakEvent event){
-		ProtectFile ProtectFile = plugin.getPlayerInfo();
+		ProtectFile ProtectFile = plugin.SafePlayers;
 		Player player = event.getPlayer();
 		String name = player.getName();
-		if(!ProtectFile.getPlayers().contains(name)){
+		if(!ProtectFile.contains(name)){
 			event.setCancelled(true);
 			player.setFireTicks(40);
 			player.sendMessage(ChatColor.RED + "You cant break blocks until you have been verified safe by an admin!");
@@ -27,10 +27,10 @@ public class ProtectListener implements Listener{
 	}
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlaceEvent(BlockPlaceEvent event){
-		ProtectFile ProtectFile = plugin.getPlayerInfo();
+		ProtectFile ProtectFile = plugin.SafePlayers;
 		Player player = event.getPlayer();
 		String name = player.getName();
-		if(!ProtectFile.getPlayers().contains(name)){
+		if(!ProtectFile.contains(name)){
 			event.setCancelled(true);
 			player.setFireTicks(40);
 			player.sendMessage(ChatColor.RED + "You cant place blocks until you have been verified safe by an admin!");

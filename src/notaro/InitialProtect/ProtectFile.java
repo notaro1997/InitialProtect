@@ -1,14 +1,14 @@
 package notaro.InitialProtect;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class ProtectFile {
 
@@ -17,43 +17,70 @@ public class ProtectFile {
 		plugin = instance;
 	}
 
-	private FileConfiguration players = null;
-	private File SafePlayersFile = null;
+	public File ProtectFile;
+	public ArrayList<String> SafePlayers;
 
-	public void loadPlayers() {
-		this.getPlayers().options().copyDefaults(true);
-		savePlayers();
-	}
+	public ProtectFile(File file){
+		this.ProtectFile = file;
+		this.SafePlayers = new ArrayList<String>();
 
-	public void reloadPlayers(	) {
-		if (SafePlayersFile == null) {
-			SafePlayersFile = new File(plugin.getDataFolder(), "SafePlayers.yml");
-		}
-		players = YamlConfiguration.loadConfiguration(SafePlayersFile);
-
-		InputStream Config = plugin.getResource("SafePlayers.yml");
-		if (Config != null) {
-			YamlConfiguration YamlConfig = YamlConfiguration.loadConfiguration(Config);
-			players.setDefaults(YamlConfig);
+		if(!this.ProtectFile.exists()){
+			try{
+				this.ProtectFile.createNewFile();
+			}catch(IOException IOError){
+				IOError.printStackTrace();		
+			}
 		}
 	}
+	public void loadData(){
 
-	public FileConfiguration getPlayers() {
-		if (players == null) {
-			reloadPlayers();
-		}
-		return players;
-	}
-
-	public void savePlayers() {
-		if (players == null || SafePlayersFile == null) {
-			return;
-		}
 		try {
-			players.save(SafePlayersFile);
-		} catch (IOException ex) {
-			Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE,"Error saving players to " + SafePlayersFile, ex);
-			ex.printStackTrace();
+			DataInputStream input = new DataInputStream(new FileInputStream(this.ProtectFile));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+			String line;
+			while ((line = reader.readLine()) != null){
+				if(!this.contains(line)){
+					this.SafePlayers.add(line);
+				}
+			}
+			reader.close();
+			input.close();
+		} catch (Exception error) {
+			error.printStackTrace();
 		}
+	}
+
+	public void saveData(){
+		try {
+			FileWriter stream = new FileWriter(this.ProtectFile);
+			BufferedWriter output = new BufferedWriter(stream);
+
+			for (String value : this.SafePlayers){	
+				output.write(value);
+				output.newLine();
+			}	
+			output.close();
+			stream.close();
+		} catch (IOException error) {
+			error.printStackTrace();
+		}
+	}
+
+	public boolean contains(String value){
+		return this.SafePlayers.contains(value);
+	}
+
+	public void add(String value){
+		if (!this.contains(value)){
+			this.SafePlayers.add(value);
+		}
+	}
+
+	public void remove(String value){
+		this.SafePlayers.remove(value);
+	}
+
+	public ArrayList<String> getValues(){
+		return this.SafePlayers;
 	}
 }
